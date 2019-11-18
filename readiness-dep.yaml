@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: readicheck
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: readicheck
+  template:
+    metadata:
+      labels:
+        app: readicheck
+    spec:
+      containers:
+      - name: readicheck
+        image: alpine
+        command: ["sh", "-c", "touch /tmp/healthy && sleep 3600"]
+        readinessProbe:
+          exec:
+            command:
+            - cat
+            - /tmp/healthy
+          initialDelaySeconds: 5
+          periodSeconds: 3
